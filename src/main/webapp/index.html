@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .game {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .game h2 {
+            margin: 0;
+        }
+        .game p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game List</h1>
+    <label for="apiKey">API Key:</label>
+    <input type="text" id="apiKey" placeholder="Enter your API key">
+
+    <br>
+
+    <label for="apiKey">Account ID:</label>
+    <input type="text" id="accountId" placeholder="Enter the ID of the account to be analyzed.">
+
+    <br>
+
+    
+    <button onclick="fetchGames()">Fetch Games</button>
+    <hr>
+    <div id="gameList"></div>
+
+    <script>
+        async function fetchGames() {
+            const apiKey = document.getElementById('apiKey').value;
+            const accountId = document.getElementById('accountId').value;
+            if (!apiKey) {
+                alert('Please enter an API key.');
+                return;
+            }
+
+            if (!accountId) {
+                alert('Please enter an account ID.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/games', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'API-Key': apiKey,
+                        'Account-ID': accountId
+                    }
+                });
+
+                if (!response.ok) {
+                    alert('Error fetching games: ' + response.statusText);
+                    return;
+                }
+
+                const games = await response.json();
+                populateGameList(games);
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function populateGameList(games) {
+            const gameList = document.getElementById('gameList');
+            gameList.innerHTML = ''; // Clear previous content
+
+            games.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.className = 'game';
+
+                gameDiv.innerHTML = `
+                    <h2>${game.name}</h2>
+                    <p>App ID: ${game.appid}</p>
+                    <p>Playtime (Last 2 Weeks): ${game.playtime_2weeks} hours</p>
+                    <p>Playtime (Forever): ${game.playtime_forever} hours</p>
+                `;
+
+                gameList.appendChild(gameDiv);
+            });
+        }
+    </script>
+</body>
+</html>
