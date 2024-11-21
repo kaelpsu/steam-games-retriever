@@ -25,7 +25,9 @@
 <body>
     <h1>Game List</h1>
     <label for="apiKey">Chave de API de desenvolvedor:</label>
+
     <input type="text" id="apiKey" placeholder="Enter your API key">
+    <span style="font-style: italic; font-size: 0.75em;">Você pode encontrar (ou criar) sua chave de API <a href="https://steamcommunity.com/dev/apikey" target="_blank">aqui.</a></span>
 
     <br>
 
@@ -86,8 +88,8 @@
                 gameDiv.innerHTML = `
                     <h2>${game.name}</h2>
                     <p>App ID: ${game.appid}</p>
-                    <p>Playtime (Last 2 Weeks): ${game.playtime_2weeks} hours</p>
-                    <p>Playtime (Forever): ${game.playtime_forever} hours</p>
+                    <p>Playtime (Last 2 Weeks): ${(game.playtime_2weeks / 60).toFixed(2)} hours</p>
+                    <p>Playtime (Forever): ${(game.playtime_forever / 60).toFixed(2)} hours</p>
                 `;
 
                 gameList.appendChild(gameDiv);
