@@ -46,7 +46,10 @@ public class SteamAPIRequest {
             // Deserialize JSON response into Java objects
             try {
                 String jsonstring = jsonResponse.toString();
-                String response = jsonstring.substring(8, jsonstring.length() - 8);
+                String response = jsonstring;
+                if (!jsonstring.substring(0, 1).equals("{")) {    
+                    response = jsonstring.substring(8, jsonstring.length() - 8);
+                }
 
                 System.out.println("JSON Response: " + response);
                 
